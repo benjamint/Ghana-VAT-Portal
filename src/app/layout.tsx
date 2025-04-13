@@ -1,31 +1,24 @@
-import { ChakraProvider } from '@chakra-ui/react'
-import { Toaster } from 'react-hot-toast'
-import FontStyles from '@/components/FontStyles'
-import './globals.css'
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
 
-export const metadata = {
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata: Metadata = {
   title: 'Ghana VAT Portal',
-  description: 'Ghana Revenue Authority VAT Management System',
-}
+  description: 'A modern web application for managing VAT collection and compliance in Ghana.',
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
-      <head>
-        <FontStyles />
-      </head>
-      <body className="font-sf-pro">
-        <ChakraProvider>
-          <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-            {children}
-          </div>
-          <Toaster position="top-right" />
-        </ChakraProvider>
+      <body className={inter.className}>
+        {children}
       </body>
     </html>
-  )
+  );
 } 

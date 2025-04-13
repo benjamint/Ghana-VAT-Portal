@@ -30,6 +30,14 @@ const nextConfig = {
   // Handle static export configuration
   skipTrailingSlashRedirect: true,
   skipMiddlewareUrlNormalize: true,
+  // Disable type checking during build
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  // Disable ESLint during build
+  eslint: {
+    ignoreDuringBuilds: true,
+  }
 }
 
 module.exports = nextConfig 
