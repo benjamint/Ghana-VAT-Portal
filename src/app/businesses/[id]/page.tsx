@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getBusinessById } from '@/app/lib/data';
+import { getBusinessById, getBusinesses } from '@/app/lib/data';
 import BusinessDetails from '@/app/components/businesses/BusinessDetails';
 
 type PageProps = {
@@ -9,6 +9,13 @@ type PageProps = {
   }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
+
+export async function generateStaticParams() {
+  const businesses = await getBusinesses();
+  return businesses.map((business) => ({
+    id: business.id,
+  }));
+}
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolvedParams = await params;
