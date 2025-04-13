@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import type { LatLngTuple } from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 interface Business {
   id: number;
@@ -23,16 +24,10 @@ export default function ClientSideMap({ businesses }: ClientSideMapProps) {
     // Import map modules only on client side
     Promise.all([
       import('leaflet'),
-      import('react-leaflet'),
-      import('leaflet/dist/leaflet.css')
+      import('react-leaflet')
     ]).then(([L, { MapContainer, TileLayer, Marker, Popup }]) => {
       // Set up leaflet icon
-      delete L.Icon.Default.prototype._getIconUrl;
-      L.Icon.Default.mergeOptions({
-        iconUrl: '/images/marker-icon.png',
-        iconRetinaUrl: '/images/marker-icon-2x.png',
-        shadowUrl: '/images/marker-shadow.png',
-      });
+      L.Icon.Default.imagePath = '/images/';
 
       // Create map component
       const MapComponent = () => (
