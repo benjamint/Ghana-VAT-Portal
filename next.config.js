@@ -5,7 +5,7 @@ const repoName = 'Ghana-VAT-Portal';
 const nextConfig = {
   output: 'export',
   basePath: isProduction ? `/${repoName}` : '',
-  assetPrefix: isProduction ? `/${repoName}/` : '',
+  assetPrefix: isProduction ? `/${repoName}` : '',
   images: {
     unoptimized: true,
   },
@@ -18,6 +18,15 @@ const nextConfig = {
     });
     return config;
   },
+  // Add publicRuntimeConfig for client-side configuration
+  publicRuntimeConfig: {
+    basePath: isProduction ? `/${repoName}` : '',
+  },
+  // Ensure scripts are loaded with correct paths
+  experimental: {
+    optimizeCss: true,
+    optimizePackageImports: ['@heroicons/react'],
+  }
 }
 
 module.exports = nextConfig 
