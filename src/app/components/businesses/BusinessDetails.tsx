@@ -13,6 +13,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import DashboardLayout from '@/components/layout/DashboardLayout';
+import { Business } from './BusinessList';
 
 interface ComplianceHistory {
   month: string;
@@ -36,37 +37,7 @@ const MOCK_COMPLIANCE_HISTORY: ComplianceHistory[] = [
 ];
 
 interface BusinessDetailsProps {
-  business: {
-    name: string;
-    tin: string;
-    registrationDate: string;
-    type: string;
-    sizeClassification: string;
-    address: string;
-    contact: string;
-    keyPersonnel: Array<{
-      name: string;
-      role: string;
-    }>;
-    complianceScore: {
-      overall: number;
-      filing: number;
-      payment: number;
-      invoice: number;
-    };
-    transactionMetrics: {
-      monthlyVolume: number;
-      averageInvoiceValue: number;
-      dailyVatCollection: number;
-      unusualFlags: number;
-    };
-    creditAssessment: {
-      paymentReliability: number;
-      sustainability: number;
-      financialHealth: number;
-      trustScore: number;
-    };
-  };
+  business: Business;
 }
 
 export default function BusinessDetails({ business }: BusinessDetailsProps) {
@@ -88,7 +59,7 @@ export default function BusinessDetails({ business }: BusinessDetailsProps) {
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h2 className="text-xl font-semibold text-gray-900">{business.name}</h2>
-                  <span className="px-3 py-1 text-sm font-medium text-green-700 border border-green-200 rounded-full">Low Risk</span>
+                  <span className="px-3 py-1 text-sm font-medium text-green-700 border border-green-200 rounded-full">{business.riskLevel}</span>
                 </div>
                 
                 <dl className="grid grid-cols-2 gap-4">
@@ -101,8 +72,8 @@ export default function BusinessDetails({ business }: BusinessDetailsProps) {
                     <dd className="mt-1 text-sm text-gray-900">{business.registrationDate}</dd>
                   </div>
                   <div className="border border-gray-100 rounded-lg p-3">
-                    <dt className="text-sm font-medium text-gray-500">Business Type</dt>
-                    <dd className="mt-1 text-sm text-gray-900">{business.type}</dd>
+                    <dt className="text-sm font-medium text-gray-500">Sector</dt>
+                    <dd className="mt-1 text-sm text-gray-900">{business.sector}</dd>
                   </div>
                   <div className="border border-gray-100 rounded-lg p-3">
                     <dt className="text-sm font-medium text-gray-500">Size Classification</dt>
@@ -202,27 +173,27 @@ export default function BusinessDetails({ business }: BusinessDetailsProps) {
                 <h2 className="text-lg font-medium text-gray-900 mb-4">Transaction Metrics</h2>
                 <div className="grid grid-cols-4 gap-4">
                   <div className="border border-gray-100 rounded-lg p-4">
-                    <div className="text-sm font-medium text-gray-500">Monthly Volume</div>
+                    <div className="text-sm font-medium text-gray-500">Transaction Volume</div>
                     <div className="mt-2 text-xl font-semibold text-gray-900">
-                      {business.transactionMetrics.monthlyVolume}
+                      {business.monthlyMetrics.transactionVolume}
                     </div>
                   </div>
                   <div className="border border-gray-100 rounded-lg p-4">
                     <div className="text-sm font-medium text-gray-500">Avg. Invoice Value</div>
                     <div className="mt-2 text-xl font-semibold text-gray-900">
-                      ₵{business.transactionMetrics.averageInvoiceValue}
+                      ₵{business.monthlyMetrics.averageInvoiceValue}
                     </div>
                   </div>
                   <div className="border border-gray-100 rounded-lg p-4">
                     <div className="text-sm font-medium text-gray-500">Daily VAT Collection</div>
                     <div className="mt-2 text-xl font-semibold text-gray-900">
-                      ₵{business.transactionMetrics.dailyVatCollection}
+                      ₵{business.monthlyMetrics.dailyVatCollection}
                     </div>
                   </div>
                   <div className="border border-gray-100 rounded-lg p-4">
                     <div className="text-sm font-medium text-gray-500">Unusual Flags</div>
                     <div className="mt-2 text-xl font-semibold text-gray-900">
-                      {business.transactionMetrics.unusualFlags}
+                      {business.monthlyMetrics.unusualFlags}
                     </div>
                   </div>
                 </div>

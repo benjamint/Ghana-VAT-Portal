@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `${business.name} - Business Details`,
-    description: `View details for ${business.name}, a ${business.type} business in ${business.location}.`,
+    description: `View details for ${business.name}, a ${business.sector} business in ${business.location}.`,
   };
 }
 
