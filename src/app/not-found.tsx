@@ -1,8 +1,13 @@
 import Link from 'next/link';
 
+// Disable static optimization for this page
+export const dynamic = 'force-static';
+
 export default function NotFound() {
+  const defaultClassName = "min-h-screen bg-white px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8";
+  
   return (
-    <div className="min-h-screen bg-white px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
+    <div className={defaultClassName}>
       <div className="mx-auto max-w-max">
         <main className="sm:flex">
           <p className="text-4xl font-bold tracking-tight text-indigo-600 sm:text-5xl">404</p>
