@@ -66,11 +66,9 @@ export default function MapComponent() {
         }
         console.log('Initializing map...');
 
-        // Initialize map
         const map = L.map(mapRef.current).setView([7.9465, -1.0232], 7);
         mapInstanceRef.current = map;
 
-        // Add tile layer first
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
@@ -78,7 +76,6 @@ export default function MapComponent() {
         const { publicRuntimeConfig } = getConfig();
         const basePath = publicRuntimeConfig?.basePath || '';
 
-        // Initialize default icon with correct paths
         delete (L.Icon.Default.prototype as any)._getIconUrl;
         L.Icon.Default.mergeOptions({
           iconRetinaUrl: `${basePath}/images/marker-icon-2x.png`,
@@ -158,18 +155,14 @@ export default function MapComponent() {
   }, [isMapReady]);
 
   return (
-    <div className="relative">
+    <div className="relative w-full h-[400px]">
       <link 
         rel="stylesheet" 
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-        crossOrigin=""
       />
       <Script
         src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-        crossOrigin=""
-        strategy="beforeInteractive"
+        strategy="lazyOnload"
         onLoad={() => {
           console.log('Leaflet script loaded');
           setIsMapReady(true);
@@ -177,7 +170,7 @@ export default function MapComponent() {
       />
       <div 
         ref={mapRef} 
-        className="w-full h-[400px] rounded-lg overflow-hidden" 
+        className="w-full h-full rounded-lg overflow-hidden" 
         style={{ position: 'relative', zIndex: 1 }}
       />
     </div>
