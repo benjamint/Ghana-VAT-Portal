@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import {
   ChevronUpDownIcon,
   FunnelIcon,
@@ -18,7 +19,8 @@ import {
   ArrowTrendingDownIcon,
   CheckCircleIcon,
   ClockIcon,
-  XCircleIcon
+  XCircleIcon,
+  MapPinIcon
 } from '@heroicons/react/24/outline';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import Link from 'next/link';
@@ -113,6 +115,42 @@ const getVATStatusColor = (status: string) => {
 };
 
 export default function BusinessList({ businesses }: BusinessListProps) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [filters, setFilters] = useState({
+    sector: searchParams.get('sector') || '',
+    location: searchParams.get('location') || '',
+    riskLevel: searchParams.get('riskLevel') || '',
+    vatStatus: searchParams.get('vatStatus') || ''
+  });
+
+  const handleFilterChange = (key: string, value: string) => {
+    const newFilters = { ...filters, [key]: value };
+    setFilters(newFilters);
+    
+    // Update URL with new filters
+    const params = new URLSearchParams();
+    Object.entries(newFilters).forEach(([k, v]) => {
+      if (v) params.set(k, v);
+    });
+    router.push(`/businesses?${params.toString()}`);
+  };
+
+  // Apply filters on the client side
+  const filteredBusinesses = businesses.filter(business => {
+    if (filters.sector && business.sector !== filters.sector) return false;
+    if (filters.location && business.location !== filters.location) return false;
+    if (filters.riskLevel && business.riskLevel !== filters.riskLevel) return false;
+    if (filters.vatStatus && business.vatStatus !== filters.vatStatus) return false;
+    return true;
+  });
+
+  // Get unique values for filters
+  const sectors = Array.from(new Set(businesses.map(b => b.sector)));
+  const locations = Array.from(new Set(businesses.map(b => b.location)));
+  const riskLevels = Array.from(new Set(businesses.map(b => b.riskLevel)));
+  const vatStatuses = Array.from(new Set(businesses.map(b => b.vatStatus)));
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -144,6 +182,53 @@ export default function BusinessList({ businesses }: BusinessListProps) {
               </button>
             </div>
 
+            {/* Filters */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <select
+                value={filters.sector}
+                onChange={(e) => handleFilterChange('sector', e.target.value)}
+                className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              >
+                <option value="">All Sectors</option>
+                {sectors.map(sector => (
+                  <option key={sector} value={sector}>{sector}</option>
+                ))}
+              </select>
+
+              <select
+                value={filters.location}
+                onChange={(e) => handleFilterChange('location', e.target.value)}
+                className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              >
+                <option value="">All Locations</option>
+                {locations.map(location => (
+                  <option key={location} value={location}>{location}</option>
+                ))}
+              </select>
+
+              <select
+                value={filters.riskLevel}
+                onChange={(e) => handleFilterChange('riskLevel', e.target.value)}
+                className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              >
+                <option value="">All Risk Levels</option>
+                {riskLevels.map(level => (
+                  <option key={level} value={level}>{level}</option>
+                ))}
+              </select>
+
+              <select
+                value={filters.vatStatus}
+                onChange={(e) => handleFilterChange('vatStatus', e.target.value)}
+                className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              >
+                <option value="">All VAT Statuses</option>
+                {vatStatuses.map(status => (
+                  <option key={status} value={status}>{status}</option>
+                ))}
+              </select>
+            </div>
+
             {/* Table */}
             <div className="overflow-x-auto -mx-6">
               <div className="min-w-full inline-block align-middle">
@@ -171,7 +256,7 @@ export default function BusinessList({ businesses }: BusinessListProps) {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                    {businesses.map((business) => (
+                    {filteredBusinesses.map((business) => (
                       <tr 
                         key={business.id} 
                         className="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"

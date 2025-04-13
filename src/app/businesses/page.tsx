@@ -16,9 +16,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function BusinessesPage({ searchParams }: PageProps) {
-  const resolvedSearchParams = await searchParams;
-  const businesses = await getBusinesses(resolvedSearchParams);
+export default async function BusinessesPage() {
+  // Get all businesses without filtering for static export
+  const businesses = await getBusinesses();
 
   return <BusinessList businesses={businesses} />;
 } 
