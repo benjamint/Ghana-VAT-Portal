@@ -1,9 +1,8 @@
 'use client';
 
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
 import { useEffect } from 'react';
+import dynamic from 'next/dynamic';
+import getConfig from 'next/config';
 
 type ComplianceStatus = 'compliant' | 'partial' | 'non-compliant';
 
@@ -195,81 +194,87 @@ const complianceConfig: Record<ComplianceStatus, { color: string; label: string 
   'non-compliant': { color: '#ef4444', label: 'Non-Compliant' }
 };
 
-// Custom icon for businesses
-const createBusinessIcon = (compliance: ComplianceStatus) => {
-  return L.divIcon({
-    className: 'custom-div-icon',
-    html: `<div style="background-color: ${complianceConfig[compliance].color}; width: 24px; height: 24px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>`,
-    iconSize: [24, 24],
-    iconAnchor: [12, 12]
-  });
-};
-
 export default function BusinessMap() {
   useEffect(() => {
-    // Initialize default icon
-    delete (L.Icon.Default.prototype as any)._getIconUrl;
-    L.Icon.Default.mergeOptions({
-      iconRetinaUrl: 'marker-icon-2x.png',
-      iconUrl: 'marker-icon.png',
-      shadowUrl: 'marker-shadow.png',
-    });
+    // Dynamic import of leaflet
+    import('leaflet').then((L) => {
+      const { publicRuntimeConfig } = getConfig();
+      const basePath = publicRuntimeConfig?.basePath || '';
 
-    // Initialize map
-    const map = L.map('map').setView([7.9465, -1.0232], 7);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    // Add markers for each business
-    businesses.forEach(business => {
-      const marker = L.marker([business.lat, business.lng], {
-        icon: createBusinessIcon(business.compliance)
+      // Initialize default icon with correct paths
+      delete (L.Icon.Default.prototype as any)._getIconUrl;
+      L.Icon.Default.mergeOptions({
+        iconRetinaUrl: `${basePath}/images/marker-icon-2x.png`,
+        iconUrl: `${basePath}/images/marker-icon.png`,
+        shadowUrl: `${basePath}/images/marker-shadow.png`,
       });
 
-      const popupContent = `
-        <div class="p-2">
-          <div class="mb-3">
-            <h3 class="font-semibold text-lg mb-1">${business.fullName}</h3>
-            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium" 
-              style="background-color: ${complianceConfig[business.compliance].color}20; 
-                     color: ${complianceConfig[business.compliance].color}">
-              ${complianceConfig[business.compliance].label}
-            </span>
-          </div>
-          <div class="space-y-2 text-sm text-gray-600">
-            <p class="flex items-center">
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-              </svg>
-              ${business.location}
-            </p>
-            <p class="flex items-center">
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-              </svg>
-              ${business.phone}
-            </p>
-          </div>
-          <div class="mt-3 pt-2 border-t border-gray-100">
-            <p class="text-xs text-gray-400 text-left">Powered by ScoreTrux</p>
-          </div>
-        </div>
-      `;
+      // Create custom icon for businesses
+      const createBusinessIcon = (compliance: ComplianceStatus) => {
+        return L.divIcon({
+          className: 'custom-div-icon',
+          html: `<div style="background-color: ${complianceConfig[compliance].color}; width: 24px; height: 24px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>`,
+          iconSize: [24, 24],
+          iconAnchor: [12, 12]
+        });
+      };
 
-      marker.bindPopup(popupContent, {
-        maxWidth: 300
+      // Initialize map
+      const map = L.map('map').setView([7.9465, -1.0232], 7);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
-    });
 
-    return () => {
-      map.remove();
-    };
+      // Add markers for each business
+      businesses.forEach(business => {
+        const marker = L.marker([business.lat, business.lng], {
+          icon: createBusinessIcon(business.compliance)
+        });
+
+        const popupContent = `
+          <div class="p-2">
+            <div class="mb-3">
+              <h3 class="font-semibold text-lg mb-1">${business.fullName}</h3>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium" 
+                style="background-color: ${complianceConfig[business.compliance].color}20; 
+                       color: ${complianceConfig[business.compliance].color}">
+                ${complianceConfig[business.compliance].label}
+              </span>
+            </div>
+            <div class="space-y-2 text-sm text-gray-600">
+              <p class="flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                ${business.location}
+              </p>
+              <p class="flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                </svg>
+                ${business.phone}
+              </p>
+            </div>
+            <div class="mt-3 pt-2 border-t border-gray-100">
+              <p class="text-xs text-gray-400 text-left">Powered by ScoreTrux</p>
+            </div>
+          </div>
+        `;
+
+        marker.bindPopup(popupContent, {
+          maxWidth: 300
+        }).addTo(map);
+      });
+
+      return () => {
+        map.remove();
+      };
+    });
   }, []);
 
   return <div id="map" className="w-full h-[400px] rounded-lg overflow-hidden" />;

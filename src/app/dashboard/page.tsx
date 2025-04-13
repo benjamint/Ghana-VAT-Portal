@@ -1,4 +1,5 @@
 import React from 'react';
+import dynamic from 'next/dynamic';
 import {
   CurrencyPoundIcon,
   BuildingOfficeIcon,
@@ -6,6 +7,34 @@ import {
   ChartBarIcon,
 } from '@heroicons/react/24/outline';
 import DashboardLayout from '@/components/layout/DashboardLayout';
+
+// Dynamically import client-side components
+const RevenueChart = dynamic(() => import('@/components/charts/RevenueChart'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-64 flex items-center justify-center text-gray-500 bg-gray-50 rounded-lg animate-pulse">
+      Loading revenue chart...
+    </div>
+  ),
+});
+
+const ComplianceChart = dynamic(() => import('@/components/charts/ComplianceChart'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-64 flex items-center justify-center text-gray-500 bg-gray-50 rounded-lg animate-pulse">
+      Loading compliance chart...
+    </div>
+  ),
+});
+
+const BusinessMap = dynamic(() => import('@/components/maps/BusinessMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[400px] flex items-center justify-center text-gray-500 bg-gray-50 rounded-lg animate-pulse">
+      Loading business map...
+    </div>
+  ),
+});
 
 export const metadata = {
   title: 'Dashboard - Ghana VAT Portal',
@@ -119,15 +148,42 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Static placeholder for charts */}
-        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-[1.1rem] font-semibold text-gray-900 dark:text-white">
-              Revenue overview
-            </h2>
+        {/* Charts and Map Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Revenue Chart */}
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-[1.1rem] font-semibold text-gray-900 dark:text-white">
+                Revenue Overview
+              </h2>
+            </div>
+            <div className="h-64">
+              <RevenueChart />
+            </div>
           </div>
-          <div className="h-64 flex items-center justify-center text-gray-500">
-            Charts will be loaded client-side
+
+          {/* Compliance Chart */}
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-[1.1rem] font-semibold text-gray-900 dark:text-white">
+                Business Compliance
+              </h2>
+            </div>
+            <div className="h-64">
+              <ComplianceChart />
+            </div>
+          </div>
+
+          {/* Business Map */}
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 lg:col-span-2">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-[1.1rem] font-semibold text-gray-900 dark:text-white">
+                Business Locations
+              </h2>
+            </div>
+            <div className="h-[400px]">
+              <BusinessMap />
+            </div>
           </div>
         </div>
       </div>
