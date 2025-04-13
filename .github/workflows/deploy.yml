@@ -15,7 +15,19 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  check-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check GitHub Pages status
+        run: |
+          echo "Please ensure GitHub Pages is enabled in your repository settings:"
+          echo "1. Go to https://github.com/benjamint/Ghana-VAT-Portal/settings/pages"
+          echo "2. Under 'Source', select 'GitHub Actions'"
+          echo "3. Save the changes"
+          echo "After enabling GitHub Pages, push to the main branch to trigger the deployment."
+
   build:
+    needs: check-pages
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
