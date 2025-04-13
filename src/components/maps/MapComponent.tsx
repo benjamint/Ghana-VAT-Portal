@@ -15,7 +15,7 @@ interface Business {
   lat: number;
   lng: number;
   compliance: ComplianceStatus;
-  logoUrl: string;
+  sector: string;
 }
 
 // Compliance status colors and labels
@@ -36,9 +36,52 @@ const businesses: Business[] = [
     lat: 5.6037, 
     lng: -0.1870, 
     compliance: 'compliant',
-    logoUrl: '/logos/sage.png'
+    sector: 'Technology'
   },
-  // ... rest of the businesses data
+  {
+    id: 2,
+    name: 'Golden Coast Traders',
+    fullName: 'Golden Coast Traders & Logistics',
+    location: 'Tema Industrial Area, Greater Accra',
+    phone: '+233 30 320 1234',
+    lat: 5.6348,
+    lng: -0.0174,
+    compliance: 'partial',
+    sector: 'Logistics'
+  },
+  {
+    id: 3,
+    name: 'Ashanti Gold Markets',
+    fullName: 'Ashanti Gold Markets International',
+    location: 'Kumasi Central Market, Kumasi',
+    phone: '+233 32 202 5678',
+    lat: 6.6885,
+    lng: -1.6244,
+    compliance: 'compliant',
+    sector: 'Trading'
+  },
+  {
+    id: 4,
+    name: 'Volta Electronics',
+    fullName: 'Volta Electronics & Appliances Ltd.',
+    location: 'Ho Municipal, Volta Region',
+    phone: '+233 36 208 9012',
+    lat: 6.6016,
+    lng: 0.4725,
+    compliance: 'non-compliant',
+    sector: 'Electronics'
+  },
+  {
+    id: 5,
+    name: 'Cape Coast Fisheries',
+    fullName: 'Cape Coast Fisheries Co. Ltd.',
+    location: 'Cape Coast Harbour, Central Region',
+    phone: '+233 33 321 3456',
+    lat: 5.1053,
+    lng: -1.2466,
+    compliance: 'partial',
+    sector: 'Fisheries'
+  }
 ];
 
 export default function MapComponent() {
@@ -47,24 +90,12 @@ export default function MapComponent() {
   const [isMapReady, setIsMapReady] = useState(false);
 
   useEffect(() => {
-    console.log('Map effect running, isMapReady:', isMapReady);
-    if (!mapRef.current || mapInstanceRef.current || !isMapReady) {
-      console.log('Map initialization conditions not met:', {
-        mapRefExists: !!mapRef.current,
-        mapInstanceExists: !!mapInstanceRef.current,
-        isMapReady
-      });
-      return;
-    }
+    if (!mapRef.current || mapInstanceRef.current || !isMapReady) return;
 
     const initMap = async () => {
       try {
         const L = (window as any).L;
-        if (!L) {
-          console.error('Leaflet not loaded');
-          return;
-        }
-        console.log('Initializing map...');
+        if (!L) return;
 
         const map = L.map(mapRef.current).setView([7.9465, -1.0232], 7);
         mapInstanceRef.current = map;
@@ -73,23 +104,32 @@ export default function MapComponent() {
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        const { publicRuntimeConfig } = getConfig();
-        const basePath = publicRuntimeConfig?.basePath || '';
-
-        delete (L.Icon.Default.prototype as any)._getIconUrl;
-        L.Icon.Default.mergeOptions({
-          iconRetinaUrl: `${basePath}/images/marker-icon-2x.png`,
-          iconUrl: `${basePath}/images/marker-icon.png`,
-          shadowUrl: `${basePath}/images/marker-shadow.png`,
-        });
-
         // Create custom icon for businesses
         const createBusinessIcon = (compliance: ComplianceStatus) => {
           return L.divIcon({
             className: 'custom-div-icon',
-            html: `<div style="background-color: ${complianceConfig[compliance].color}; width: 24px; height: 24px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>`,
-            iconSize: [24, 24],
-            iconAnchor: [12, 12]
+            html: `
+              <div style="
+                background-color: ${complianceConfig[compliance].color}; 
+                width: 32px; 
+                height: 32px; 
+                border-radius: 50%; 
+                border: 3px solid white; 
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              ">
+                <div style="
+                  width: 8px;
+                  height: 8px;
+                  background: white;
+                  border-radius: 50%;
+                "></div>
+              </div>
+            `,
+            iconSize: [32, 32],
+            iconAnchor: [16, 16]
           });
         };
 
@@ -100,18 +140,21 @@ export default function MapComponent() {
           });
 
           const popupContent = `
-            <div class="p-2">
+            <div class="p-3 min-w-[250px]">
               <div class="mb-3">
                 <h3 class="font-semibold text-lg mb-1">${business.fullName}</h3>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium" 
-                  style="background-color: ${complianceConfig[business.compliance].color}20; 
-                         color: ${complianceConfig[business.compliance].color}">
-                  ${complianceConfig[business.compliance].label}
-                </span>
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" 
+                    style="background-color: ${complianceConfig[business.compliance].color}20; 
+                           color: ${complianceConfig[business.compliance].color}">
+                    ${complianceConfig[business.compliance].label}
+                  </span>
+                  <span class="text-xs text-gray-500">${business.sector}</span>
+                </div>
               </div>
               <div class="space-y-2 text-sm text-gray-600">
                 <p class="flex items-center">
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                       d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
@@ -120,7 +163,7 @@ export default function MapComponent() {
                   ${business.location}
                 </p>
                 <p class="flex items-center">
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                       d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                   </svg>
@@ -128,17 +171,17 @@ export default function MapComponent() {
                 </p>
               </div>
               <div class="mt-3 pt-2 border-t border-gray-100">
-                <p class="text-xs text-gray-400 text-left">Powered by ScoreTrux</p>
+                <p class="text-xs text-gray-400">Last updated: Today</p>
               </div>
             </div>
           `;
 
           marker.bindPopup(popupContent, {
-            maxWidth: 300
+            maxWidth: 300,
+            className: 'custom-popup'
           }).addTo(map);
         });
 
-        console.log('Map initialization complete');
       } catch (error) {
         console.error('Error initializing map:', error);
       }
@@ -163,10 +206,7 @@ export default function MapComponent() {
       <Script
         src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         strategy="lazyOnload"
-        onLoad={() => {
-          console.log('Leaflet script loaded');
-          setIsMapReady(true);
-        }}
+        onLoad={() => setIsMapReady(true)}
       />
       <div 
         ref={mapRef} 
@@ -175,4 +215,4 @@ export default function MapComponent() {
       />
     </div>
   );
-} 
+}
