@@ -30,7 +30,13 @@ const nextConfig = {
   // Enable ESLint during build
   eslint: {
     ignoreDuringBuilds: false,
-  }
+  },
+  // Configure error handling
+  onError: (err) => {
+    console.error('Next.js error:', err);
+  },
+  // Disable middleware for static export
+  middleware: false
 }
 
 module.exports = nextConfig 
