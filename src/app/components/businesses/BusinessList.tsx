@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, Suspense } from 'react';
+import React, { useState, Suspense, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
   ChevronUpDownIcon,
@@ -117,12 +117,26 @@ const getVATStatusColor = (status: string) => {
 function FilteredBusinessList({ businesses }: BusinessListProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
+  
+  // Initialize filters with safe defaults
   const [filters, setFilters] = useState({
-    sector: searchParams.get('sector') || '',
-    location: searchParams.get('location') || '',
-    riskLevel: searchParams.get('riskLevel') || '',
-    vatStatus: searchParams.get('vatStatus') || ''
+    sector: '',
+    location: '',
+    riskLevel: '',
+    vatStatus: ''
   });
+
+  // Update filters when searchParams change
+  useEffect(() => {
+    if (searchParams) {
+      setFilters({
+        sector: searchParams.get('sector') || '',
+        location: searchParams.get('location') || '',
+        riskLevel: searchParams.get('riskLevel') || '',
+        vatStatus: searchParams.get('vatStatus') || ''
+      });
+    }
+  }, [searchParams]);
 
   const handleFilterChange = (key: string, value: string) => {
     const newFilters = { ...filters, [key]: value };
