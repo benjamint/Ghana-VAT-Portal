@@ -5,7 +5,7 @@ const repoName = 'Ghana-VAT-Portal';
 const nextConfig = {
   output: 'export',
   basePath: isProduction ? `/${repoName}` : '',
-  assetPrefix: isProduction ? `/${repoName}` : '',
+  assetPrefix: isProduction ? `/${repoName}/` : '',
   images: {
     unoptimized: true,
   },
@@ -36,7 +36,11 @@ const nextConfig = {
     console.error('Next.js error:', err);
   },
   // Disable middleware for static export
-  middleware: false
+  middleware: false,
+  // Disable server components for static export
+  experimental: {
+    serverComponents: false,
+  }
 }
 
 module.exports = nextConfig 
