@@ -2,6 +2,7 @@
 const nextConfig = {
   output: 'export',
   basePath: '/Ghana-VAT-Portal',
+  assetPrefix: '/Ghana-VAT-Portal/',
   images: {
     unoptimized: true,
   },
