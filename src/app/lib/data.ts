@@ -61,8 +61,11 @@ export async function getBusinessById(id: string): Promise<Business | null> {
   return mockBusiness;
 }
 
-export function getBusinesses(): Business[] {
-  return [
+export async function getBusinesses(searchParams?: { [key: string]: string | string[] | undefined }): Promise<Business[]> {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  let businesses: Business[] = [
     {
       id: '1',
       name: 'Acme Corporation',
@@ -217,4 +220,22 @@ export function getBusinesses(): Business[] {
       ]
     }
   ];
+
+  // Apply filters if searchParams exist
+  if (searchParams) {
+    if (searchParams.sector) {
+      businesses = businesses.filter(b => b.sector === searchParams.sector);
+    }
+    if (searchParams.location) {
+      businesses = businesses.filter(b => b.location === searchParams.location);
+    }
+    if (searchParams.riskLevel) {
+      businesses = businesses.filter(b => b.riskLevel === searchParams.riskLevel);
+    }
+    if (searchParams.vatStatus) {
+      businesses = businesses.filter(b => b.vatStatus === searchParams.vatStatus);
+    }
+  }
+
+  return businesses;
 } 
