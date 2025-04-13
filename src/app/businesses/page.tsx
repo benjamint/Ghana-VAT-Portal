@@ -3,8 +3,8 @@ import BusinessList from '@/app/components/businesses/BusinessList';
 import { getBusinesses } from '@/app/lib/data';
 
 type PageProps = {
-  params: Promise<{}>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  params: { [key: string]: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -14,9 +14,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function BusinessesPage({ params, searchParams }: PageProps) {
-  const resolvedSearchParams = await searchParams;
-  const businesses = await getBusinesses(resolvedSearchParams);
+export default async function BusinessesPage({ searchParams }: PageProps) {
+  const businesses = await getBusinesses(searchParams);
 
   return <BusinessList businesses={businesses} />;
 } 
