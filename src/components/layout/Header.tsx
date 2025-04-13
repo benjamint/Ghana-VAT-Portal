@@ -2,20 +2,13 @@
 
 import React from 'react';
 import { MagnifyingGlassIcon, BellIcon } from '@heroicons/react/24/outline';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
 
 export default function Header() {
-  const pathname = usePathname();
-  const pageTitle = pathname === '/dashboard' || pathname === '/' 
-    ? 'Dashboard' 
-    : pathname.split('/')[1].charAt(0).toUpperCase() + pathname.split('/')[1].slice(1);
-
   return (
     <header className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-800">
       {/* Left section */}
       <div className="flex items-center gap-2">
-        <h1 className="text-xl font-semibold text-gray-900 dark:text-white">{pageTitle}</h1>
+        <h1 className="text-xl font-semibold text-gray-900 dark:text-white">Dashboard</h1>
       </div>
 
       {/* Right section */}

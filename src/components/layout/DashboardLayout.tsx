@@ -2,8 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
 import {
   HomeIcon,
   BanknotesIcon,
@@ -27,24 +25,6 @@ const navigation = [
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const [darkMode, setDarkMode] = React.useState(false);
-  const pathname = usePathname();
-
-  React.useEffect(() => {
-    // Check for saved theme preference
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      setDarkMode(savedTheme === 'dark');
-      document.documentElement.classList.toggle('dark', savedTheme === 'dark');
-    }
-  }, []);
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    localStorage.setItem('theme', !darkMode ? 'dark' : 'light');
-    document.documentElement.classList.toggle('dark');
-  };
-
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
       {/* Sidebar */}
@@ -55,32 +35,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
           <div className="flex flex-1 flex-col overflow-y-auto">
             <nav className="flex-1 space-y-1 px-2 py-4">
-              {navigation.map((item) => {
-                const isActive = item.href === '/dashboard' 
-                  ? (pathname === '/dashboard' || pathname === '/') 
-                  : pathname === item.href;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={`group flex items-center px-2 py-2 text-sm rounded-md transition-colors duration-150 ease-in-out ${
-                      isActive
-                        ? 'bg-gray-100 text-[#5266eb] font-semibold dark:bg-gray-700 dark:text-[#5266eb]'
-                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
-                    }`}
-                  >
-                    <item.icon 
-                      className={`mr-3 h-5 w-5 flex-shrink-0 ${
-                        isActive
-                          ? 'text-[#5266eb]'
-                          : 'text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-300'
-                      }`}
-                      aria-hidden="true"
-                    />
-                    {item.name}
-                  </Link>
-                );
-              })}
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="group flex items-center px-2 py-2 text-sm rounded-md transition-colors duration-150 ease-in-out text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                >
+                  <item.icon 
+                    className="mr-3 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-300"
+                    aria-hidden="true"
+                  />
+                  {item.name}
+                </Link>
+              ))}
             </nav>
           </div>
         </div>
