@@ -47,12 +47,33 @@ export default function MapComponent() {
   const [isMapReady, setIsMapReady] = useState(false);
 
   useEffect(() => {
-    if (!mapRef.current || mapInstanceRef.current || !isMapReady) return;
+    console.log('Map effect running, isMapReady:', isMapReady);
+    if (!mapRef.current || mapInstanceRef.current || !isMapReady) {
+      console.log('Map initialization conditions not met:', {
+        mapRefExists: !!mapRef.current,
+        mapInstanceExists: !!mapInstanceRef.current,
+        isMapReady
+      });
+      return;
+    }
 
     const initMap = async () => {
       try {
         const L = (window as any).L;
-        if (!L) return;
+        if (!L) {
+          console.error('Leaflet not loaded');
+          return;
+        }
+        console.log('Initializing map...');
+
+        // Initialize map
+        const map = L.map(mapRef.current).setView([7.9465, -1.0232], 7);
+        mapInstanceRef.current = map;
+
+        // Add tile layer first
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
         const { publicRuntimeConfig } = getConfig();
         const basePath = publicRuntimeConfig?.basePath || '';
@@ -74,14 +95,6 @@ export default function MapComponent() {
             iconAnchor: [12, 12]
           });
         };
-
-        // Initialize map
-        const map = L.map(mapRef.current).setView([7.9465, -1.0232], 7);
-        mapInstanceRef.current = map;
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
 
         // Add markers for each business
         businesses.forEach(business => {
@@ -127,6 +140,8 @@ export default function MapComponent() {
             maxWidth: 300
           }).addTo(map);
         });
+
+        console.log('Map initialization complete');
       } catch (error) {
         console.error('Error initializing map:', error);
       }
@@ -143,7 +158,7 @@ export default function MapComponent() {
   }, [isMapReady]);
 
   return (
-    <>
+    <div className="relative">
       <link 
         rel="stylesheet" 
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -154,9 +169,17 @@ export default function MapComponent() {
         src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossOrigin=""
-        onLoad={() => setIsMapReady(true)}
+        strategy="beforeInteractive"
+        onLoad={() => {
+          console.log('Leaflet script loaded');
+          setIsMapReady(true);
+        }}
       />
-      <div ref={mapRef} className="w-full h-[400px] rounded-lg overflow-hidden" />
-    </>
+      <div 
+        ref={mapRef} 
+        className="w-full h-[400px] rounded-lg overflow-hidden" 
+        style={{ position: 'relative', zIndex: 1 }}
+      />
+    </div>
   );
 } 
