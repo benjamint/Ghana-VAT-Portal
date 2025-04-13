@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import BusinessList from '@/app/components/businesses/BusinessList';
 import { getBusinesses } from '@/app/lib/data';
 
+export const dynamic = 'force-dynamic';
+
 type PageProps = {
   params: Promise<{}>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
