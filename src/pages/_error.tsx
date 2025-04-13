@@ -1,4 +1,9 @@
 import { NextPage } from 'next';
+import Link from 'next/link';
+
+export const config = {
+  unstable_runtimeJS: false
+};
 
 interface ErrorProps {
   statusCode?: number;
@@ -22,12 +27,12 @@ const Error: NextPage<ErrorProps> = ({ statusCode }) => {
               </p>
             </div>
             <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
-              <a
+              <Link
                 href="/"
                 className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Go back home
-              </a>
+              </Link>
             </div>
           </div>
         </main>
