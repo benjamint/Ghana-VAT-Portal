@@ -11,13 +11,6 @@ const nextConfig = {
   },
   trailingSlash: true,
   distDir: 'out',
-  webpack: (config) => {
-    config.module.rules.push({
-      test: /\.css$/,
-      use: ['style-loader', 'css-loader'],
-    });
-    return config;
-  },
   // Add publicRuntimeConfig for client-side configuration
   publicRuntimeConfig: {
     basePath: isProduction ? `/${repoName}` : '',
@@ -30,13 +23,13 @@ const nextConfig = {
   // Handle static export configuration
   skipTrailingSlashRedirect: true,
   skipMiddlewareUrlNormalize: true,
-  // Disable type checking during build
+  // Enable type checking during build
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
-  // Disable ESLint during build
+  // Enable ESLint during build
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   }
 }
 

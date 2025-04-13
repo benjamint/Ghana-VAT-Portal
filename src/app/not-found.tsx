@@ -1,7 +1,8 @@
 import Link from 'next/link';
 
-// Disable static optimization for this page
+// Ensure this page is statically generated
 export const dynamic = 'force-static';
+export const revalidate = false;
 
 // Define default styles as constants
 const DEFAULT_STYLES = {
