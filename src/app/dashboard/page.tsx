@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  BanknotesIcon,
+  CurrencyPoundIcon,
   BuildingOfficeIcon,
   DocumentTextIcon,
   ChartBarIcon,
@@ -22,7 +22,7 @@ export default function DashboardPage() {
             <div className="p-5">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <BanknotesIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                  <CurrencyPoundIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                 </div>
                 <div className="ml-3 w-0 flex-1">
                   <dl>
