@@ -1,12 +1,6 @@
 import Link from 'next/link';
 
-export const dynamicParams = false;
-
-export async function generateStaticParams() {
-  return [];
-}
-
-export default function NotFoundCatchAll() {
+export default function NotFound() {
   return (
     <div className="min-h-screen bg-white px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
       <div className="mx-auto max-w-max">
