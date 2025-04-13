@@ -3,11 +3,12 @@ import { notFound } from 'next/navigation';
 import { getBusinessById } from '@/app/lib/data';
 import BusinessDetails from '@/app/components/businesses/BusinessDetails';
 
-interface PageProps {
+type PageProps = {
   params: {
     id: string;
   };
-}
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const business = await getBusinessById(params.id);
