@@ -1,8 +1,11 @@
 /** @type {import('next').NextConfig} */
+const isProduction = process.env.NODE_ENV === 'production';
+const repoName = 'Ghana-VAT-Portal';
+
 const nextConfig = {
   output: 'export',
-  basePath: '/Ghana-VAT-Portal',
-  assetPrefix: '/Ghana-VAT-Portal/',
+  basePath: isProduction ? `/${repoName}` : '',
+  assetPrefix: isProduction ? `/${repoName}/` : '',
   images: {
     unoptimized: true,
   },
