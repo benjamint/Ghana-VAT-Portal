@@ -4,14 +4,15 @@ import { getBusinessById } from '@/app/lib/data';
 import BusinessDetails from '@/app/components/businesses/BusinessDetails';
 
 type PageProps = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
   searchParams?: { [key: string]: string | string[] | undefined };
 };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const business = await getBusinessById(params.id);
+  const resolvedParams = await params;
+  const business = await getBusinessById(resolvedParams.id);
   
   if (!business) {
     return {
@@ -26,7 +27,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function BusinessPage({ params }: PageProps) {
-  const business = await getBusinessById(params.id);
+  const resolvedParams = await params;
+  const business = await getBusinessById(resolvedParams.id);
 
   if (!business) {
     notFound();
