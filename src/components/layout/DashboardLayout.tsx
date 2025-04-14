@@ -19,7 +19,6 @@ const navigation = [
   { name: 'Transactions', href: '/transactions', icon: BanknotesIcon },
   { name: 'Invoicing', href: '/invoicing', icon: DocumentTextIcon },
   { name: 'Virtual POS', href: '/virtual-pos', icon: BanknotesIcon },
-  { name: 'Accounting', href: '/accounting', icon: ChartBarIcon },
   { name: 'Reports', href: '/reports', icon: ChartPieIcon },
   { name: 'Businesses', href: '/businesses', icon: BuildingOfficeIcon },
 ];
