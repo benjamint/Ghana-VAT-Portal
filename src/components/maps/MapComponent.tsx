@@ -81,6 +81,61 @@ const businesses: Business[] = [
     lng: -1.2466,
     compliance: 'partial',
     sector: 'Fisheries'
+  },
+  {
+    id: 6,
+    name: 'Northern Agro',
+    fullName: 'Northern Agro Processing Ltd.',
+    location: 'Tamale Industrial Zone, Northern Region',
+    phone: '+233 37 202 8901',
+    lat: 9.4035,
+    lng: -0.8389,
+    compliance: 'compliant',
+    sector: 'Agriculture'
+  },
+  {
+    id: 7,
+    name: 'Takoradi Exports',
+    fullName: 'Takoradi Export Solutions',
+    location: 'Takoradi Port, Western Region',
+    phone: '+233 31 204 5678',
+    lat: 4.8898,
+    lng: -1.7519,
+    compliance: 'non-compliant',
+    sector: 'Logistics'
+  },
+  {
+    id: 8,
+    name: 'Sunyani Fresh',
+    fullName: 'Sunyani Fresh Produce Ltd.',
+    location: 'Sunyani Market Area, Bono Region',
+    phone: '+233 35 209 1234',
+    lat: 7.3349,
+    lng: -2.3123,
+    compliance: 'partial',
+    sector: 'Agriculture'
+  },
+  {
+    id: 9,
+    name: 'Upper East Mining',
+    fullName: 'Upper East Mining Corporation',
+    location: 'Bolgatanga Industrial Area, Upper East',
+    phone: '+233 38 205 6789',
+    lat: 10.7859,
+    lng: -0.8514,
+    compliance: 'compliant',
+    sector: 'Mining'
+  },
+  {
+    id: 10,
+    name: 'Wa Processors',
+    fullName: 'Wa Food Processors Ltd.',
+    location: 'Wa Industrial Estate, Upper West',
+    phone: '+233 39 207 3456',
+    lat: 10.0601,
+    lng: -2.5099,
+    compliance: 'partial',
+    sector: 'Food Processing'
   }
 ];
 
@@ -149,7 +204,6 @@ export default function MapComponent() {
                            color: ${complianceConfig[business.compliance].color}">
                     ${complianceConfig[business.compliance].label}
                   </span>
-                  <span class="text-xs text-gray-500">${business.sector}</span>
                 </div>
               </div>
               <div class="space-y-2 text-sm text-gray-600">
@@ -171,7 +225,7 @@ export default function MapComponent() {
                 </p>
               </div>
               <div class="mt-3 pt-2 border-t border-gray-100">
-                <p class="text-xs text-gray-400">Last updated: Today</p>
+                <p class="text-xs text-gray-400">Powered by ScoreTrux</p>
               </div>
             </div>
           `;
