@@ -16,6 +16,7 @@ const verificationStatuses: Record<string, VerificationStatus> = {
   'Verified': { status: 'Verified', color: 'text-green-600 bg-green-50', icon: CheckBadgeIcon },
   'Partially Verified': { status: 'Partially Verified', color: 'text-yellow-600 bg-yellow-50', icon: ExclamationTriangleIcon },
   'Unverified': { status: 'Unverified', color: 'text-red-600 bg-red-50', icon: XCircleIcon },
+  'default': { status: 'Unverified', color: 'text-gray-600 bg-gray-50', icon: XCircleIcon }
 };
 
 function TrustScoreGauge({ score }: { score: number }) {
@@ -59,6 +60,10 @@ function TrustScoreGauge({ score }: { score: number }) {
 }
 
 function BusinessProfileHeader({ business }: { business: any }) {
+  const verificationStatus = business.verificationStatus && verificationStatuses[business.verificationStatus] 
+    ? verificationStatuses[business.verificationStatus] 
+    : verificationStatuses['default'];
+
   return (
     <div className="bg-white rounded-lg shadow p-6 mb-6">
       <div className="flex items-start justify-between">
@@ -68,12 +73,12 @@ function BusinessProfileHeader({ business }: { business: any }) {
               <ArrowLeftIcon className="w-5 h-5" />
             </Link>
             <h1 className="text-2xl font-bold text-gray-900">{business.name}</h1>
-            <div className={`px-3 py-1 rounded-full text-sm font-medium ${verificationStatuses[business.verificationStatus].color}`}>
+            <div className={`px-3 py-1 rounded-full text-sm font-medium ${verificationStatus.color}`}>
               <div className="flex items-center gap-1">
-                {React.createElement(verificationStatuses[business.verificationStatus].icon, {
+                {React.createElement(verificationStatus.icon, {
                   className: "w-4 h-4"
                 })}
-                {business.verificationStatus}
+                {verificationStatus.status}
               </div>
             </div>
           </div>
