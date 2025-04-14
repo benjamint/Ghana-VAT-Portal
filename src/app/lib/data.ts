@@ -5,60 +5,17 @@ export async function getBusinessById(id: string): Promise<Business | null> {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 100));
 
-  // Mock data
-  const mockBusiness: Business = {
-    id,
-    name: 'Accra Retail Solutions',
-    tin: 'GHA123456789',
-    sector: 'Retail',
-    complianceScore: {
-      overall: 85,
-      filing: 90,
-      payment: 82,
-      invoice: 88,
-    },
-    vatStatus: 'Filed',
-    riskLevel: 'Low',
-    lastTransactionDate: '2024-03-15',
-    vatCollectedYTD: 2500000,
-    location: 'Accra',
-    registrationDate: '2023-01-15',
-    address: '123 Independence Ave, Accra',
-    contact: '+233 20 123 4567',
-    businessType: 'Limited Liability',
-    sizeClassification: 'Medium Enterprise',
-    keyPersonnel: [
-      { name: 'John Doe', role: 'CEO' },
-      { name: 'Jane Smith', role: 'CFO' },
-    ],
-    complianceMetrics: {
-      filingScore: 90,
-      paymentScore: 82,
-      invoiceScore: 88
-    },
-    monthlyMetrics: {
-      transactionVolume: 1250,
-      averageInvoiceValue: 850,
-      dailyVatCollection: 2500,
-      unusualFlags: 2,
-    },
-    creditAssessment: {
-      paymentReliability: 88,
-      sustainability: 85,
-      financialHealth: 82,
-      trustScore: 86,
-    },
-    enforcementHistory: [
-      {
-        type: 'Audit',
-        date: '2023-12-15',
-        status: 'Completed',
-        details: 'Routine compliance audit'
-      }
-    ]
-  };
+  // Get all businesses
+  const businesses = await getBusinesses();
+  
+  // Find the matching business
+  const business = businesses.find(b => b.id === id);
+  
+  if (!business) {
+    return null;
+  }
 
-  return mockBusiness;
+  return business;
 }
 
 export async function getBusinesses(searchParams?: { [key: string]: string | string[] | undefined }): Promise<Business[]> {
