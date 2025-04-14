@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, CheckCircleIcon, ExclamationTriangleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, CheckCircleIcon, ExclamationTriangleIcon, XCircleIcon, CheckBadgeIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { getBusinessById } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
@@ -28,6 +28,13 @@ export default async function BusinessDetailsPage({ params }: { params: { id: st
       default:
         return <XCircleIcon className="h-5 w-5 text-red-500" />;
     }
+  };
+
+  const getTrustScoreColor = (score: number) => {
+    if (score >= 90) return 'text-green-600';
+    if (score >= 70) return 'text-green-500';
+    if (score >= 50) return 'text-yellow-500';
+    return 'text-red-500';
   };
 
   return (
@@ -132,6 +139,64 @@ export default async function BusinessDetailsPage({ params }: { params: { id: st
           </div>
         </div>
 
+        {/* Trust Score Analysis */}
+        <div className="bg-white rounded-lg shadow mb-6">
+          <div className="px-4 py-5 sm:p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Trust Score Analysis</h2>
+            <div className="grid grid-cols-4 gap-4">
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <h3 className="text-sm font-medium text-gray-500">Payment Reliability</h3>
+                <div className={`mt-2 text-2xl font-semibold ${getTrustScoreColor(business.creditAssessment.paymentReliability)}`}>
+                  {business.creditAssessment.paymentReliability}%
+                </div>
+              </div>
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <h3 className="text-sm font-medium text-gray-500">Sustainability</h3>
+                <div className={`mt-2 text-2xl font-semibold ${getTrustScoreColor(business.creditAssessment.sustainability)}`}>
+                  {business.creditAssessment.sustainability}%
+                </div>
+              </div>
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <h3 className="text-sm font-medium text-gray-500">Financial Health</h3>
+                <div className={`mt-2 text-2xl font-semibold ${getTrustScoreColor(business.creditAssessment.financialHealth)}`}>
+                  {business.creditAssessment.financialHealth}%
+                </div>
+              </div>
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <h3 className="text-sm font-medium text-gray-500">Trust Score</h3>
+                <div className={`mt-2 text-2xl font-semibold ${getTrustScoreColor(business.creditAssessment.trustScore)}`}>
+                  {business.creditAssessment.trustScore}%
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Enforcement History */}
+        <div className="bg-white rounded-lg shadow mb-6">
+          <div className="px-4 py-5 sm:p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Enforcement History</h2>
+            <div className="space-y-4">
+              {business.enforcementHistory.map((event, index) => (
+                <div key={index} className="p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-900">{event.type}</h3>
+                      <p className="text-sm text-gray-600">{event.details}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-gray-500">{new Date(event.date).toLocaleDateString()}</p>
+                      <p className={`text-sm ${event.status === 'Completed' ? 'text-green-600' : 'text-yellow-600'}`}>
+                        {event.status}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
         {/* Key Personnel */}
         <div className="bg-white rounded-lg shadow">
           <div className="px-4 py-5 sm:p-6">
@@ -145,6 +210,13 @@ export default async function BusinessDetailsPage({ params }: { params: { id: st
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Powered by ScoreTrux */}
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-500">
+            Powered by <span className="font-medium">ScoreTrux</span>
+          </p>
         </div>
       </div>
     </div>
