@@ -3,6 +3,8 @@ import Link from 'next/link';
 import React from 'react';
 import BusinessLayout from '@/components/businesses/BusinessLayout';
 import { TrustScoreChart, TransactionVolumeChart } from '@/components/businesses/BusinessCharts';
+import { getBusinessById } from '@/app/lib/data';
+import { notFound } from 'next/navigation';
 
 interface VerificationStatus {
   status: 'Verified' | 'Partially Verified' | 'Unverified';
@@ -258,64 +260,6 @@ function VerificationDetails({ business }: { business: any }) {
   );
 }
 
-async function getBusinessData(id: string) {
-  // In a real application, this would fetch from an API or database
-  return {
-    id,
-    name: 'Acme Corporation',
-    tin: 'GH123456789',
-    contact: '+233 20 123 4567',
-    address: '123 Independence Ave, Accra',
-    businessType: 'Manufacturing',
-    sizeClassification: 'Large Enterprise',
-    registrationDate: '2020-01-15',
-    verificationStatus: 'Verified',
-    trustScore: 85,
-    taxComplianceScore: 90,
-    transactionVerificationScore: 85,
-    legitimacyScore: 80,
-    trustScoreHistory: [75, 78, 80, 82, 84, 85],
-    industryAverageHistory: [70, 71, 72, 72, 73, 73],
-    transactionVolume: [150, 180, 160, 190, 175, 200],
-    consistencyScore: 88,
-    unusualPatterns: [
-      'Unusual spike in transactions on weekends',
-      'Higher than average refund rate',
-    ],
-    complianceHistory: [
-      {
-        type: 'success',
-        date: '2023-12-15',
-        description: 'VAT Return filed and paid on time',
-      },
-      {
-        type: 'warning',
-        date: '2023-11-15',
-        description: 'Late payment - resolved within grace period',
-      },
-      {
-        type: 'success',
-        date: '2023-10-15',
-        description: 'Successful routine audit completed',
-      },
-    ],
-    verifiedDocuments: [
-      { name: 'Business Registration Certificate' },
-      { name: 'Tax Clearance Certificate' },
-      { name: 'VAT Registration Certificate' },
-      { name: 'Directors\' ID Documents' },
-    ],
-    verificationSteps: [
-      { name: 'Document Verification', completed: true },
-      { name: 'Physical Address Verification', completed: true },
-      { name: 'Bank Account Verification', completed: true },
-      { name: 'Director Background Check', completed: true },
-    ],
-    physicalVerification: 'Completed - Location matches registered address',
-    lastVerificationDate: '2023-12-01',
-  };
-}
-
 export async function generateStaticParams() {
   // This is a placeholder array of business IDs that will be pre-rendered
   // Replace this with your actual business IDs from your data source
@@ -327,7 +271,11 @@ export async function generateStaticParams() {
 }
 
 export default async function BusinessDetailsPage({ params }: { params: { id: string } }) {
-  const business = await getBusinessData(params.id);
+  const business = await getBusinessById(params.id);
+  
+  if (!business) {
+    notFound();
+  }
 
   return (
     <BusinessLayout>
