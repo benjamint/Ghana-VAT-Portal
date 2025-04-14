@@ -68,154 +68,154 @@ export async function getBusinesses(searchParams?: { [key: string]: string | str
   let businesses: Business[] = [
     {
       id: '1',
-      name: 'Acme Corporation',
-      tin: 'TIN123456789',
-      sector: 'Manufacturing',
+      name: 'Melcom Group',
+      tin: 'GHA123456789',
+      sector: 'Retail',
       complianceScore: {
-        overall: 85,
-        filing: 90,
-        payment: 80,
-        invoice: 85
+        overall: 92,
+        filing: 95,
+        payment: 90,
+        invoice: 91
       },
       vatStatus: 'Filed',
       riskLevel: 'Low',
       lastTransactionDate: '2024-03-15',
-      vatCollectedYTD: 1500000,
+      vatCollectedYTD: 2500000,
       location: 'Accra',
-      registrationDate: '2020-01-15',
-      address: '123 Industrial Area, Accra',
-      contact: '+233 24 123 4567',
+      registrationDate: '1989-01-15',
+      address: 'North Industrial Area, Accra',
+      contact: '+233 30 222 3333',
       businessType: 'Limited Liability',
       sizeClassification: 'Large',
       keyPersonnel: [
-        { name: 'John Doe', role: 'CEO' },
-        { name: 'Jane Smith', role: 'Finance Director' }
+        { name: 'Bhagwan Khubchandani', role: 'Group Chairman' },
+        { name: 'Godwin Avenorgbo', role: 'Director of Communications' }
       ],
       complianceMetrics: {
-        filingScore: 90,
-        paymentScore: 80,
-        invoiceScore: 85
+        filingScore: 95,
+        paymentScore: 90,
+        invoiceScore: 91
       },
       monthlyMetrics: {
-        transactionVolume: 500,
-        averageInvoiceValue: 3000,
-        dailyVatCollection: 50000,
-        unusualFlags: 2
+        transactionVolume: 850,
+        averageInvoiceValue: 5000,
+        dailyVatCollection: 75000,
+        unusualFlags: 1
       },
       creditAssessment: {
-        paymentReliability: 90,
-        sustainability: 85,
-        financialHealth: 88,
-        trustScore: 87
+        paymentReliability: 95,
+        sustainability: 92,
+        financialHealth: 94,
+        trustScore: 93
       },
       enforcementHistory: [
         {
           type: 'Audit',
-          date: '2023-06-15',
+          date: '2023-12-15',
           status: 'Completed',
-          details: 'Routine compliance audit'
+          details: 'Annual compliance audit'
         }
       ]
     },
     {
       id: '2',
-      name: 'Tech Solutions Ltd',
-      tin: 'TIN987654321',
-      sector: 'Technology',
+      name: 'Despite Group of Companies',
+      tin: 'GHA987654321',
+      sector: 'Media & Entertainment',
       complianceScore: {
-        overall: 70,
-        filing: 75,
-        payment: 65,
-        invoice: 70
+        overall: 88,
+        filing: 90,
+        payment: 85,
+        invoice: 89
       },
-      vatStatus: 'Pending',
-      riskLevel: 'Medium',
-      lastTransactionDate: '2024-03-10',
-      vatCollectedYTD: 800000,
-      location: 'Kumasi',
-      registrationDate: '2021-05-20',
-      address: '456 Tech Park, Kumasi',
-      contact: '+233 24 765 4321',
+      vatStatus: 'Filed',
+      riskLevel: 'Low',
+      lastTransactionDate: '2024-03-14',
+      vatCollectedYTD: 1800000,
+      location: 'Accra',
+      registrationDate: '1999-05-20',
+      address: 'Abeka Junction, Accra',
+      contact: '+233 30 224 4444',
       businessType: 'Limited Liability',
-      sizeClassification: 'Medium',
+      sizeClassification: 'Large',
       keyPersonnel: [
-        { name: 'Michael Brown', role: 'Managing Director' },
-        { name: 'Sarah Johnson', role: 'Operations Manager' }
+        { name: 'Osei Kwame Despite', role: 'CEO' },
+        { name: 'Ernest Ofori Sarpong', role: 'Business Development Director' }
       ],
       complianceMetrics: {
-        filingScore: 75,
-        paymentScore: 65,
-        invoiceScore: 70
+        filingScore: 90,
+        paymentScore: 85,
+        invoiceScore: 89
       },
       monthlyMetrics: {
-        transactionVolume: 300,
-        averageInvoiceValue: 2500,
-        dailyVatCollection: 30000,
-        unusualFlags: 5
+        transactionVolume: 600,
+        averageInvoiceValue: 4500,
+        dailyVatCollection: 60000,
+        unusualFlags: 2
       },
       creditAssessment: {
-        paymentReliability: 75,
-        sustainability: 70,
-        financialHealth: 72,
-        trustScore: 70
+        paymentReliability: 88,
+        sustainability: 90,
+        financialHealth: 89,
+        trustScore: 89
       },
       enforcementHistory: [
         {
-          type: 'Notice',
-          date: '2023-12-01',
-          status: 'Resolved',
-          details: 'Late filing warning'
+          type: 'Review',
+          date: '2024-01-15',
+          status: 'Completed',
+          details: 'Quarterly compliance review'
         }
       ]
     },
     {
       id: '3',
-      name: 'Global Trading Co',
-      tin: 'TIN456789123',
-      sector: 'Retail',
+      name: 'Kantanka Group',
+      tin: 'GHA456789123',
+      sector: 'Manufacturing',
       complianceScore: {
-        overall: 60,
-        filing: 55,
-        payment: 65,
-        invoice: 60
+        overall: 75,
+        filing: 80,
+        payment: 70,
+        invoice: 75
       },
-      vatStatus: 'Overdue',
-      riskLevel: 'High',
-      lastTransactionDate: '2024-02-28',
-      vatCollectedYTD: 500000,
-      location: 'Tema',
-      registrationDate: '2019-11-10',
-      address: '789 Market Square, Tema',
-      contact: '+233 24 456 7890',
+      vatStatus: 'Pending',
+      riskLevel: 'Medium',
+      lastTransactionDate: '2024-03-10',
+      vatCollectedYTD: 900000,
+      location: 'Gomoa Mpota',
+      registrationDate: '1994-11-10',
+      address: 'Gomoa Mpota, Central Region',
+      contact: '+233 30 225 5555',
       businessType: 'Limited Liability',
-      sizeClassification: 'Medium',
+      sizeClassification: 'Large',
       keyPersonnel: [
-        { name: 'David Wilson', role: 'General Manager' },
-        { name: 'Emily Davis', role: 'Finance Controller' }
+        { name: 'Kwadwo Safo Kantanka', role: 'CEO' },
+        { name: 'Kwadwo Safo Kantanka Jr', role: 'COO' }
       ],
       complianceMetrics: {
-        filingScore: 55,
-        paymentScore: 65,
-        invoiceScore: 60
+        filingScore: 80,
+        paymentScore: 70,
+        invoiceScore: 75
       },
       monthlyMetrics: {
-        transactionVolume: 200,
-        averageInvoiceValue: 2000,
-        dailyVatCollection: 20000,
-        unusualFlags: 8
+        transactionVolume: 400,
+        averageInvoiceValue: 3500,
+        dailyVatCollection: 45000,
+        unusualFlags: 4
       },
       creditAssessment: {
-        paymentReliability: 60,
-        sustainability: 55,
-        financialHealth: 58,
-        trustScore: 55
+        paymentReliability: 75,
+        sustainability: 78,
+        financialHealth: 76,
+        trustScore: 76
       },
       enforcementHistory: [
         {
-          type: 'Penalty',
-          date: '2024-01-15',
+          type: 'Notice',
+          date: '2024-02-15',
           status: 'Pending',
-          details: 'Late payment penalty'
+          details: 'Filing deadline reminder'
         }
       ]
     }
