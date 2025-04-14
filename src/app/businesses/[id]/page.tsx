@@ -1,34 +1,8 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import DashboardLayout from '@/components/layout/DashboardLayout';
 import { ArrowLeftIcon, CheckBadgeIcon, ExclamationTriangleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { Line } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-} from 'chart.js';
 import React from 'react';
-
-// Register ChartJS components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
+import BusinessLayout from '@/components/businesses/BusinessLayout';
+import { TrustScoreChart, TransactionVolumeChart } from '@/components/businesses/BusinessCharts';
 
 interface VerificationStatus {
   status: 'Verified' | 'Partially Verified' | 'Unverified';
@@ -131,26 +105,6 @@ function BusinessProfileHeader({ business }: { business: any }) {
 }
 
 function TrustScorePanel({ business }: { business: any }) {
-  const chartData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    datasets: [
-      {
-        label: 'Trust Score',
-        data: business.trustScoreHistory,
-        borderColor: '#6366f1',
-        backgroundColor: 'rgba(99, 102, 241, 0.1)',
-        fill: true,
-      },
-      {
-        label: 'Industry Average',
-        data: business.industryAverageHistory,
-        borderColor: '#94a3b8',
-        backgroundColor: 'transparent',
-        borderDash: [5, 5],
-      },
-    ],
-  };
-
   return (
     <div className="bg-white rounded-lg shadow p-6 mb-6">
       <h2 className="text-lg font-semibold text-gray-900 mb-4">Trust Score Analysis</h2>
@@ -172,16 +126,10 @@ function TrustScorePanel({ business }: { business: any }) {
         </div>
       </div>
       <div className="h-64">
-        <Line data={chartData} options={{
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: {
-              beginAtZero: true,
-              max: 100,
-            },
-          },
-        }} />
+        <TrustScoreChart 
+          trustScoreHistory={business.trustScoreHistory}
+          industryAverageHistory={business.industryAverageHistory}
+        />
       </div>
     </div>
   );
@@ -195,22 +143,7 @@ function TransactionAnalysis({ business }: { business: any }) {
         <div>
           <h3 className="text-sm font-medium text-gray-500 mb-4">Transaction Volume</h3>
           <div className="h-64">
-            <Line
-              data={{
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [{
-                  label: 'Volume',
-                  data: business.transactionVolume,
-                  borderColor: '#6366f1',
-                  backgroundColor: 'rgba(99, 102, 241, 0.1)',
-                  fill: true,
-                }],
-              }}
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-              }}
-            />
+            <TransactionVolumeChart transactionVolume={business.transactionVolume} />
           </div>
         </div>
         <div className="space-y-4">
@@ -325,6 +258,64 @@ function VerificationDetails({ business }: { business: any }) {
   );
 }
 
+async function getBusinessData(id: string) {
+  // In a real application, this would fetch from an API or database
+  return {
+    id,
+    name: 'Acme Corporation',
+    tin: 'GH123456789',
+    contact: '+233 20 123 4567',
+    address: '123 Independence Ave, Accra',
+    businessType: 'Manufacturing',
+    sizeClassification: 'Large Enterprise',
+    registrationDate: '2020-01-15',
+    verificationStatus: 'Verified',
+    trustScore: 85,
+    taxComplianceScore: 90,
+    transactionVerificationScore: 85,
+    legitimacyScore: 80,
+    trustScoreHistory: [75, 78, 80, 82, 84, 85],
+    industryAverageHistory: [70, 71, 72, 72, 73, 73],
+    transactionVolume: [150, 180, 160, 190, 175, 200],
+    consistencyScore: 88,
+    unusualPatterns: [
+      'Unusual spike in transactions on weekends',
+      'Higher than average refund rate',
+    ],
+    complianceHistory: [
+      {
+        type: 'success',
+        date: '2023-12-15',
+        description: 'VAT Return filed and paid on time',
+      },
+      {
+        type: 'warning',
+        date: '2023-11-15',
+        description: 'Late payment - resolved within grace period',
+      },
+      {
+        type: 'success',
+        date: '2023-10-15',
+        description: 'Successful routine audit completed',
+      },
+    ],
+    verifiedDocuments: [
+      { name: 'Business Registration Certificate' },
+      { name: 'Tax Clearance Certificate' },
+      { name: 'VAT Registration Certificate' },
+      { name: 'Directors\' ID Documents' },
+    ],
+    verificationSteps: [
+      { name: 'Document Verification', completed: true },
+      { name: 'Physical Address Verification', completed: true },
+      { name: 'Bank Account Verification', completed: true },
+      { name: 'Director Background Check', completed: true },
+    ],
+    physicalVerification: 'Completed - Location matches registered address',
+    lastVerificationDate: '2023-12-01',
+  };
+}
+
 export async function generateStaticParams() {
   // This is a placeholder array of business IDs that will be pre-rendered
   // Replace this with your actual business IDs from your data source
@@ -335,51 +326,11 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function BusinessDetailsPage({ params }: { params: { id: string } }) {
-  const [business, setBusiness] = useState<any>({
-    id: params.id,
-    name: 'Loading...',
-    tin: 'Loading...',
-    contact: 'Loading...',
-    address: 'Loading...',
-    businessType: 'Loading...',
-    sizeClassification: 'Loading...',
-    registrationDate: new Date().toISOString(),
-    verificationStatus: 'Unverified',
-    trustScore: 0,
-    taxComplianceScore: 0,
-    transactionVerificationScore: 0,
-    legitimacyScore: 0,
-    trustScoreHistory: [0, 0, 0, 0, 0, 0],
-    industryAverageHistory: [0, 0, 0, 0, 0, 0],
-  });
-
-  useEffect(() => {
-    // Simulate loading business data
-    const mockBusiness = {
-      id: params.id,
-      name: 'Acme Corporation',
-      tin: 'GH123456789',
-      contact: '+233 20 123 4567',
-      address: '123 Independence Ave, Accra',
-      businessType: 'Manufacturing',
-      sizeClassification: 'Large Enterprise',
-      registrationDate: '2020-01-15',
-      verificationStatus: 'Verified',
-      trustScore: 85,
-      taxComplianceScore: 90,
-      transactionVerificationScore: 85,
-      legitimacyScore: 80,
-      trustScoreHistory: [75, 78, 80, 82, 84, 85],
-      industryAverageHistory: [70, 71, 72, 72, 73, 73],
-      // Add more mock data as needed
-    };
-
-    setBusiness(mockBusiness);
-  }, [params.id]);
+export default async function BusinessDetailsPage({ params }: { params: { id: string } }) {
+  const business = await getBusinessData(params.id);
 
   return (
-    <DashboardLayout>
+    <BusinessLayout>
       <div className="space-y-6">
         <BusinessProfileHeader business={business} />
         <TrustScorePanel business={business} />
@@ -387,6 +338,6 @@ export default function BusinessDetailsPage({ params }: { params: { id: string }
         <ComplianceTimeline business={business} />
         <VerificationDetails business={business} />
       </div>
-    </DashboardLayout>
+    </BusinessLayout>
   );
 }
