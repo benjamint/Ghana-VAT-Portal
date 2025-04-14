@@ -325,88 +325,67 @@ function VerificationDetails({ business }: { business: any }) {
   );
 }
 
+export async function generateStaticParams() {
+  // This is a placeholder array of business IDs that will be pre-rendered
+  // Replace this with your actual business IDs from your data source
+  const businessIds = ['1', '2', '3', '4', '5'];
+  
+  return businessIds.map((id) => ({
+    id: id,
+  }));
+}
+
 export default function BusinessDetailsPage({ params }: { params: { id: string } }) {
-  const [business, setBusiness] = useState<any>(null);
+  const [business, setBusiness] = useState<any>({
+    id: params.id,
+    name: 'Loading...',
+    tin: 'Loading...',
+    contact: 'Loading...',
+    address: 'Loading...',
+    businessType: 'Loading...',
+    sizeClassification: 'Loading...',
+    registrationDate: new Date().toISOString(),
+    verificationStatus: 'Unverified',
+    trustScore: 0,
+    taxComplianceScore: 0,
+    transactionVerificationScore: 0,
+    legitimacyScore: 0,
+    trustScoreHistory: [0, 0, 0, 0, 0, 0],
+    industryAverageHistory: [0, 0, 0, 0, 0, 0],
+  });
 
   useEffect(() => {
-    // In a real application, fetch business data from an API
-    // For now, we'll use mock data
-    setBusiness({
+    // Simulate loading business data
+    const mockBusiness = {
       id: params.id,
-      name: 'Sage Microsystems Ghana Ltd.',
-      tin: 'GHA123456789',
-      contact: '+233 30 273 4567',
-      address: '14 Independence Ave, Airport City, Accra',
-      businessType: 'Technology Services',
-      sizeClassification: 'Medium Enterprise',
+      name: 'Acme Corporation',
+      tin: 'GH123456789',
+      contact: '+233 20 123 4567',
+      address: '123 Independence Ave, Accra',
+      businessType: 'Manufacturing',
+      sizeClassification: 'Large Enterprise',
       registrationDate: '2020-01-15',
       verificationStatus: 'Verified',
       trustScore: 85,
       taxComplianceScore: 90,
       transactionVerificationScore: 85,
       legitimacyScore: 80,
-      trustScoreHistory: [75, 78, 80, 82, 85, 85],
-      industryAverageHistory: [70, 71, 72, 71, 73, 72],
-      transactionVolume: [150, 180, 160, 190, 175, 200],
-      consistencyScore: 88,
-      unusualPatterns: [
-        'Unusual spike in transactions on weekends',
-        'Higher than average refund rate',
-      ],
-      complianceHistory: [
-        {
-          type: 'success',
-          date: '2023-12-15',
-          description: 'VAT Return filed and paid on time',
-        },
-        {
-          type: 'warning',
-          date: '2023-11-15',
-          description: 'Late payment - resolved within grace period',
-        },
-        {
-          type: 'success',
-          date: '2023-10-15',
-          description: 'Successful routine audit completed',
-        },
-      ],
-      verifiedDocuments: [
-        { name: 'Business Registration Certificate' },
-        { name: 'Tax Clearance Certificate' },
-        { name: 'VAT Registration Certificate' },
-        { name: 'Directors\' ID Documents' },
-      ],
-      verificationSteps: [
-        { name: 'Document Verification', completed: true },
-        { name: 'Physical Address Verification', completed: true },
-        { name: 'Bank Account Verification', completed: true },
-        { name: 'Director Background Check', completed: true },
-      ],
-      physicalVerification: 'Completed - Location matches registered address',
-      lastVerificationDate: '2023-12-01',
-    });
-  }, [params.id]);
+      trustScoreHistory: [75, 78, 80, 82, 84, 85],
+      industryAverageHistory: [70, 71, 72, 72, 73, 73],
+      // Add more mock data as needed
+    };
 
-  if (!business) {
-    return (
-      <DashboardLayout>
-        <div className="flex items-center justify-center h-screen">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
-        </div>
-      </DashboardLayout>
-    );
-  }
+    setBusiness(mockBusiness);
+  }, [params.id]);
 
   return (
     <DashboardLayout>
-      <div className="py-6">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-          <BusinessProfileHeader business={business} />
-          <TrustScorePanel business={business} />
-          <TransactionAnalysis business={business} />
-          <ComplianceTimeline business={business} />
-          <VerificationDetails business={business} />
-        </div>
+      <div className="space-y-6">
+        <BusinessProfileHeader business={business} />
+        <TrustScorePanel business={business} />
+        <TransactionAnalysis business={business} />
+        <ComplianceTimeline business={business} />
+        <VerificationDetails business={business} />
       </div>
     </DashboardLayout>
   );
